@@ -1,0 +1,80 @@
+---
+title: "1.2 Exercise"
+author: "Harlan Wittlieff"
+date: "3/23/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Load Library
+library(readxl)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+obama_df <- read_excel("data/obama-approval-ratings.xls")
+```
+
+```{r}
+# Create a bar chart
+bc<-ggplot(data=obama_df, aes(x=Issue, y=Approve)) +
+  geom_bar(stat="identity", color="Blue", fill="Blue") + theme(text = element_text(size=20),
+        axis.text.x = element_text(angle=90, hjust=.1)) + coord_flip() + ggtitle("Obama's Approval Ratings") +
+  xlab("Issue") + ylab("Approval %")
+
+bc
+```
+```{r}
+
+# Convert data to long format
+df_l <- gather(obama_df, Type, value, Approve:None, factor_key=TRUE)
+
+# Build levels
+df_l$type <- factor(df_l$type, levels = c('Disapprove', 'None', 'Approve'))
+
+# Create stacked bar chart
+sbc <- ggplot(df_l, aes(fill=Type, y=value, x=Issue)) + 
+    geom_bar(position="stack", stat="identity") + theme(text = element_text(size=20),
+        axis.text.x = element_text(angle=90, hjust=.1)) + coord_flip() + 
+  ggtitle("Obama's Ratings by Issue") + xlab("Issue") + ylab("Percentage")
+
+# Show chart
+sbc
+```
+```{r}
+# Extract needed information
+rating <- c(obama_df$Approve[8], obama_df$Disapprove[8], obama_df$None[8])
+Type <- c('Approve', 'Disapprove', 'None')
+
+# Build data frame
+data <- data.frame(group=type, value=rating)
+
+# Plot pie chart
+pc <- ggplot(data, aes(x="", y=rating, fill=Type))+
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) + theme_void() + 
+  ggtitle("Obama's Rating on Taxes")
+
+pc
+
+```
+```{r}
+# Plot donut chart
+
+
+# set hole size
+hsize <- 4
+
+dc <- ggplot(data, aes(x=hsize, y=rating, fill=Type))+
+  geom_col() +
+  coord_polar(theta = "y") +
+  xlim(c(0.2, hsize + 0.5)) +
+  ggtitle("Obama's Rating on Taxes")+ xlab("") + ylab("")
+
+
+
+
+dc
+```
+
+
