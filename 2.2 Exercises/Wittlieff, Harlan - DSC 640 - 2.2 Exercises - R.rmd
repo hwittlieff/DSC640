@@ -1,0 +1,33 @@
+---
+title: "2.2 Exercise"
+author: "Harlan Wittlieff"
+date: "4/10/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Load Library
+library(readxl)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+df <- read_excel("Data/world-population.xlsm")
+```
+
+```{r}
+p1 <- ggplot() + geom_line(aes(y = Population, x = Year), data = df) +
+  ggtitle("World Population by Year") + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "grey")) + ylim(0, 7000000000)
+
+p1
+```
+
+```{r}
+p2 <- ggplot() + geom_step(aes(y = Population, x = Year), data = df) +
+  ggtitle("World Population by Year") + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "grey")) + ylim(0, 7000000000)
+
+p2
+```
+
