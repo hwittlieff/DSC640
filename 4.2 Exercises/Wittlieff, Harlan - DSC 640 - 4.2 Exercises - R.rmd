@@ -1,0 +1,53 @@
+---
+title: "2.2 Exercise"
+author: "Harlan Wittlieff"
+date: "4/10/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Load Library
+
+df <- read.table("Data/expenditures.txt", sep="\t", header=TRUE)
+```
+
+```{r}
+# Load Libraries
+library(treemapify)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+df2008 <- df[df$year == 2008, ]
+```
+
+
+
+```{r}
+ggplot(df2008, aes(area=expenditure, fill = category, label = paste(category, expenditure, sep = "\n"))) +
+    geom_treemap() + geom_treemap_text(colour = "white", 
+                                       place = "centre", 
+                                       size = 15) + 
+    theme(legend.position="none")+
+  ggtitle("2008 Ependitures by Category")
+```
+
+```{r}
+df_byyear <- df %>% group_by(year) %>% summarise(total_expenditure = sum(expenditure))
+```
+
+
+
+```{r}
+ggplot(df_byyear, aes(x=year, y=total_expenditure)) + geom_area() +
+  ggtitle("Expenditures by Year")+ theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "grey")) + xlab("Year") + ylab("Expenditure")
+```
+
+```{r}
+ggplot(df, aes(x=year, y=expenditure, fill=category)) + geom_area() + xlab("Year") + ylab("Expenditure") + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "grey")) +
+  ggtitle("Expenditures by Year and Category")
+```
+
