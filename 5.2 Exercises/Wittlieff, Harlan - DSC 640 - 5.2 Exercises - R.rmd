@@ -1,0 +1,47 @@
+---
+title: "5.2 Exercise"
+author: "Harlan Wittlieff"
+date: "5/21/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Load dataframes
+df_costco <- read.csv("Data/costcos-geocoded.csv")
+df_bb <- read.csv("Data/ppg2008.csv")
+```
+
+```{r}
+# Load Libraries
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(sf)
+library(mapview)
+```
+
+
+```{r}
+data <- as.matrix(df_bb[, -1])
+names(df_bb) <- make.names(names(df_bb), unique=TRUE)
+rownames(data) <- df_bb$Name
+
+
+heatmap(data, Colv = NA, Rowv = NA, scale="column", main= '2008 NBA Performance')
+```
+
+```{r}
+mapview(df_costco, xcol='Longitude', ycol = 'Latitude', crs=4269, grid = FALSE)
+```
+
+```{r}
+ggplot(data = df_bb, aes(x=MIN, y=PTS)) +
+    ylim(0, 5000) + 
+    theme_bw() + 
+    geom_point(alpha = 0.1, col="red") + 
+    geom_density2d(color= "black") + 
+    ggtitle("2008 NBA - MIN vs PTS") + 
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(x="MIN", y="PTS") + ylim(0, 35)
+```
+
