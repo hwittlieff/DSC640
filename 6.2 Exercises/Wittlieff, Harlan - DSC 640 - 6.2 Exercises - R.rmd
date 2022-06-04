@@ -1,0 +1,52 @@
+---
+title: "6.2 Exercise"
+author: "Harlan Wittlieff"
+date: "6/4/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Load dataframes
+df<- read.csv("Data/education.csv")
+```
+
+```{r}
+# Load Libraries
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(tidyverse)
+```
+
+
+```{r}
+hist(df$pupil_staff_ratio, main="USA State Pupil to Staff Ratios",
+     xlab="Pupil to Staff Ratio", ylab="State Count", col="darkmagenta")
+```
+
+```{r}
+boxplot(df$pupil_staff_ratio, main="USA State Pupil to Staff Ratios", 
+        ylab="Pupil to Staff Ratio", col="darkmagenta")
+```
+
+```{r}
+df$staff_per_student <- 1/df$pupil_staff_ratio
+```
+
+
+```{r}
+p <- df %>%
+    ggplot(aes(x = staff_per_student, y = state)) + geom_col(aes(x=.1), fill="grey") +
+    geom_col(width=0.5, fill="black") + ggtitle("Staff per Student by State")
+
+ggplotly(p)
+```
+
+```{r}
+ggplot(df, aes(x=pupil_staff_ratio, y=math))+ geom_point(colour='darkblue') + theme_bw() + theme(panel.border = element_blank(), 
+      panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "grey")) + xlab("Pupil to Staff Ratio") + ylab("Math Scores") + ggtitle("Staffing vs Math Score by State")
+```
+
+
+
+
